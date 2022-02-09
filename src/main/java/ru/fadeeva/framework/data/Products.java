@@ -23,20 +23,16 @@ public class Products {
 
 
     public static List<Products> getProducts() {
+
         return products;
     }
 
+    public static void setProducts(List<Products> products) {
+        Products.products = products;
+    }
 
     public static void addToCart(Products product) {
         getProducts().add(product);
     }
 
-    public void removeProduct(String name) {
-        for (Products product : products) {
-            if (product.getName().equals(name)) {
-                getProducts().remove(product);
-                return;
-            }
-        }
-    }
 }

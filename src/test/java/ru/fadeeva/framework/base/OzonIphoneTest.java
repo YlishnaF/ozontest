@@ -11,10 +11,11 @@ public class OzonIphoneTest extends BaseClass {
         pageManager.getSearchResultPage().searchSettings(DataForSearch.PRICE, "100000");
         pageManager.getSearchResultPage().searchSettings(DataForSearch.INTERFACE, "NFC");
         pageManager.getSearchResultPage().searchSettings("Высокий рейтинг", "non");
-        pageManager.getSearchResultPage().addEightProductsToCart();
+        pageManager.getSearchResultPage().addProductsToCart("8");
         pageManager.getSearchResultPage().goIntoCart();
         pageManager.getCartPage().closeBanner();
-        pageManager.getCartPage().checkAmountOfProducts("8 товаров");
+        pageManager.getCartPage().checkAmountOfProducts();
+        pageManager.getCartPage().checkAllProductsInCart();
         pageManager.getCartPage().deleteAllProducts();
     }
 }

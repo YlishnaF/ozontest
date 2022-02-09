@@ -49,7 +49,7 @@ public class BasePage {
         wait.until(ExpectedConditions.textToBePresentInElement(webElement, text));
     }
 
-    public void waitForElementPresent(final By by, int timeout) {
+    protected void waitForElementPresent(final By by, int timeout) {
         WebDriverWait wait = (WebDriverWait) new WebDriverWait(driverManager.getDriver(), timeout)
                 .ignoring(StaleElementReferenceException.class);
         wait.until(new ExpectedCondition<Boolean>() {
@@ -61,14 +61,31 @@ public class BasePage {
         });
     }
 
-    public void waitElementPresent(By locator){
+    protected void waitElementPresent(By locator) {
         wait.until(ExpectedConditions.presenceOfElementLocated(locator));
     }
 
-    public WebElement scrollWithOffset(WebElement element, int x, int y) {
+    protected WebElement scrollWithOffset(WebElement element, int x, int y) {
         String code = "window.scroll(" + (element.getLocation().x + x) + ","
                 + (element.getLocation().y + y) + ");";
         ((JavascriptExecutor) driverManager.getDriver()).executeScript(code, element, x, y);
         return element;
+    }
+
+    protected void waitElementSelected(WebElement webElement) {
+        wait.until(ExpectedConditions.elementToBeSelected(webElement));
+    }
+
+    protected void waitElementIsNotPresent(WebElement webElement) {
+        wait.until(ExpectedConditions.invisibilityOfAllElements(webElement));
+    }
+
+    protected boolean isElementPresent(By by) {
+        try {
+            driverManager.getDriver().findElement(by);
+            return true;
+        } catch (NoSuchElementException e) {
+            return false;
+        }
     }
 }
