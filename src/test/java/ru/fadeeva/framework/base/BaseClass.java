@@ -9,10 +9,8 @@ import ru.fadeeva.framework.managers.DriverManager;
 import ru.fadeeva.framework.managers.InitManager;
 import ru.fadeeva.framework.managers.PageManager;
 import ru.fadeeva.framework.managers.TestPropManager;
-import ru.fadeeva.framework.utils.MyAllureListener;
 import ru.fadeeva.framework.utils.PropsConst;
 
-@ExtendWith(MyAllureListener.class)
 public class BaseClass {
     private final DriverManager driverManager = DriverManager.getInstance();
     protected PageManager pageManager = PageManager.getInstance();
@@ -21,7 +19,6 @@ public class BaseClass {
     @BeforeAll
     public static void beforeClass(){
         InitManager.initFramework();
-        System.out.println("BeforeAll");
     }
 
     @BeforeEach
@@ -34,7 +31,6 @@ public class BaseClass {
 
     @AfterAll
     public static void afterAll() {
-        System.out.println("after all");
         InitManager.quitFramework();
     }
 

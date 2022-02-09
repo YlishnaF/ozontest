@@ -7,7 +7,7 @@ public class StartPage extends BasePage{
     @FindBy(xpath = "//input[@placeholder =\"Искать на Ozon\"]")
     protected WebElement searchLine;
 
-    public void startSearchProduct(String name) throws InterruptedException {
+    public void startSearchProduct(String name) {
         waitElementToBeClicable(searchLine);
         searchLine.click();
         searchLine.sendKeys(name);

@@ -15,14 +15,14 @@ public class SearchResultPage extends BasePage {
     @FindBy(xpath = "//header[contains(text(), \"Категория\")]")
     private WebElement markerPageLoad;
 
-    @FindBy(xpath = "//div[@class=\"rp8 filter-block\"]")
+    @FindBy(xpath = "//div[contains(@class, \"filter-block\")]")
     private List<WebElement> specifySearchBlocks;
 
     @FindBy(xpath = "//div[@class=\"pr\"]")
     private List<WebElement> additionalFilters;
 
 
-    @FindBy(xpath = "//div[@class=\"l9h mh\"]")
+    @FindBy(xpath = "//div[contains(@class, \"widget-search-result-container\")]/div/div")
     private List<WebElement> listOfProducts;
 
     @FindBy(xpath = "//span[contains(text(),\"В корзину\")]/../..")
@@ -40,6 +40,10 @@ public class SearchResultPage extends BasePage {
     @FindBy(xpath = "//div[@class=\"ui-l7 ui-l8\"]/span[contains(text(), \"Высокий рейтинг\")]")
     private WebElement reiting;
 
+    @FindBy(xpath = "//div[@data-widget=\"searchResultsFiltersActive\"]")
+    private WebElement myFilters;
+
+    private int index = 0;
 
     public void searchSettings(String specCategory, String value) {
         waitElementVisible(markerPageLoad);
@@ -47,79 +51,72 @@ public class SearchResultPage extends BasePage {
             if (specifySearchBlocks.get(s).getText().contains(specCategory)) {
                 switch (specCategory) {
                     case (DataForSearch.PRICE) -> {
-                        WebElement maxPriceDiv = specifySearchBlocks.get(s).findElements(By.xpath(".//input[@class=\"ui-g1 ui-g2 ui-a8a\"]")).get(1);
+                        WebElement maxPriceDiv = specifySearchBlocks.get(s).findElement(By.xpath("//p[contains(text(), \"до\")]/../input"));
                         scrollToElement(specifySearchBlocks.get(s - 1));
                         maxPriceDiv.click();
-                        maxPriceDiv.sendKeys(Keys.DELETE);
-                        for (int i = 0; i < 7; i++) {
+                     //   maxPriceDiv.sendKeys(Keys.DELETE);
+                        maxPriceDiv.clear();
+                        for (int i = 0; i < 8; i++) {
                             maxPriceDiv.sendKeys(Keys.BACK_SPACE);
                         }
                         maxPriceDiv.sendKeys(value);
                     }
                     case (DataForSearch.INTERFACE) -> {
-                        WebElement interfaces = specifySearchBlocks.get(s).findElement(By.xpath(".//span[contains(text(), \"NFC\")]/../../div[@class=\"ui-b7a\"]"));
+                        WebElement interfaces = specifySearchBlocks.get(s).findElement(By.xpath(".//span[contains(text(), \"NFC\")]/../../div"));
                         scrollToElement(specifySearchBlocks.get(s - 1));
                         interfaces.click();
-                        waitAttributeBecomeAvailable(interfaces.findElement(By.xpath("./..")), "class", "ui-ba6 ui-ba7 ui-ba8 ui-a9b pu up0");
+                        waitTextAvailable(myFilters, "Беспроводные интерфейсы: NFC");
+                    }
+                    case ("Высокий рейтинг")->{
+                        WebElement highRating = specifySearchBlocks.get(s).findElement(By.xpath(".//div[@value=\"Высокий рейтинг\"]//div"));
+                        highRating.click();
+                        waitTextAvailable(myFilters, "Высокий рейтинг");
+                    }
+                    case("Бренды")->{
+                        List<WebElement> brands = specifySearchBlocks.get(s).findElements(By.xpath(".//a//span"));
+                        WebElement showAll = specifySearchBlocks.get(s).findElement(By.xpath(".//span[contains(text(), \"Посмотреть все\")]"));
+                        showAll.click();
+                        for (WebElement brand:brands) {
+                            if(brand.getText().contains(value)){
+                                WebElement myBrand  = brand.findElement(By.xpath("./../../div")); myBrand.click();
+
+                            }
+
+                        }
                     }
                 }
             }
         }
     }
-
-    public void popularOrOthersFilters(String s) throws InterruptedException {
-//        scrollToElement(amountOfFindProductsInformation);
-        //       waitElementToBeClicable(popularAndOtherSettings);
-        //       popularAndOtherSettings.click();
-        //      waitAttributeBecomeAvailable(popularAndOtherSettings,"aria-expanded", "true");
-        for (WebElement filter : additionalFilters) {
-            if (filter.getText().contains(s)) {
-                filter.click();
-                waitAttributeBecomeAvailable(filter.findElement(By.xpath("./label")), "class", "ui-ba6 ui-ab8 ui-ba8 ui-ab7 ui-a9b q9p");
-            }
-        }
-        waitElementPresent(By.xpath("//div[@class=\"ui-l7 ui-l8\"]/span[contains(text(), \"Высокий рейтинг\")]"));
-         }
-
-    int index = 0;
-    int k = 0;
 
     public void addEightProductsToCart() {
         for (int i = 0; i < listOfProducts.size(); i++) {
             if(i%2==0) {
-                try {
-                    clickAdd(i);
+                WebElement name = listOfProducts.get(i).findElement(By.xpath(".//a/span/span"));
+                WebElement webElement = listOfProducts.get(i).findElement(By.xpath(".//span[contains(text(),\"В корзину\")]/../.."));
+                WebElement price = listOfProducts.get(i).findElement(By.xpath(".//span[@class=\"ui-q ui-q2 ui-q5\"]"));
+                if(webElement.isDisplayed()){
+                    waitElementToBeClicable(webElement);
+                    clickElement(webElement);
+                    Products.addToCart(new Products(name.getText(), Integer.parseInt(price.getText().replaceAll("\\D+",""))));
+                    System.out.println(price.getText().replaceAll("\\D+",""));
+                    System.out.println(name.getText());
+                    waitTextAvailable(amountProductsInCart, String.valueOf(Products.getProducts().size()));
                     index++;
                     if (index == 8) {
                         return;
                     }
-                } catch (StaleElementReferenceException e) {
-                    k++;
-                    System.out.println(k);
-                    clickAdd(i);
-                    index++;
-                    if (index == 8) {
-                        return;
-                    }
+                } else {
+                    index=index+2;
                 }
             }
         }
     }
+    public void chooseBrands(String ...str){
+
+    }
     public void goIntoCart(){
         waitElementToBeClicable(goToCart);
         goToCart.click();
-    }
-
-    private void clickAdd(int ind) {
-        WebElement name = listOfProducts.get(ind).findElement(By.xpath(".//span[@class=\"jc6 cj7 jc7 c9j f-tsBodyL h1k\"]/span"));
-        WebElement webElement = listOfProducts.get(ind).findElement(By.xpath(".//span[contains(text(),\"В корзину\")]/../.."));
-        if(webElement.isDisplayed()){
-            waitElementToBeClicable(webElement);
-            clickElement(webElement);
-            Products.addToCart(new Products(name.getText()));
-            System.out.println(name.getText());
-            waitTextAvailable(amountProductsInCart, String.valueOf(Products.getProducts().size()));
-        }
-
     }
 }

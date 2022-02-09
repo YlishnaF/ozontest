@@ -64,4 +64,11 @@ public class BasePage {
     public void waitElementPresent(By locator){
         wait.until(ExpectedConditions.presenceOfElementLocated(locator));
     }
+
+    public WebElement scrollWithOffset(WebElement element, int x, int y) {
+        String code = "window.scroll(" + (element.getLocation().x + x) + ","
+                + (element.getLocation().y + y) + ");";
+        ((JavascriptExecutor) driverManager.getDriver()).executeScript(code, element, x, y);
+        return element;
+    }
 }
