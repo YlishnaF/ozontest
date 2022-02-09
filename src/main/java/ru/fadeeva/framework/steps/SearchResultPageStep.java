@@ -1,8 +1,6 @@
 package ru.fadeeva.framework.steps;
 
-import io.cucumber.datatable.DataTable;
 import io.cucumber.java.ru.Допустим;
-import io.cucumber.messages.Messages;
 import ru.fadeeva.framework.managers.PageManager;
 
 import java.util.List;
@@ -15,11 +13,7 @@ public class SearchResultPageStep {
         for (List<String> data: list) {
             pageManager.getSearchResultPage().searchSettings(data.get(0), data.get(1));
         }
-//        dataTable.asMap(String.class, String.class)
-//                        .forEach((key, value)->
-//                        {
-//                            pageManager.getSearchResultPage().searchSettings((String) key, (String) value);
-//                        });
+
 
     }
 

@@ -8,7 +8,8 @@ import org.junit.runner.RunWith;
 @RunWith(Cucumber.class)
 @CucumberOptions(
         features = {"src/test/resources/scenario"},
-        glue = {"src/main/java/ru/fadeeva/framework/steps"}
+        glue = {"ru/fadeeva/framework/steps"},
+        tags = "@regress"
 )
 public class CucumberRunnerTest {
 }
