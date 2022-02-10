@@ -14,15 +14,16 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <encoding.type>UTF-8</encoding.type>
         <selenium.version>3.141.59</selenium.version>
-        <junit.version>5.8.2</junit.version>
+        <junit.jupiter.version>5.8.2</junit.jupiter.version>
         <junit-platform-launcher.version>1.8.2</junit-platform-launcher.version>
         <surefire.version>3.0.0-M5</surefire.version>
-        <compiler.version>3.9.0</compiler.version>
+        <compiler.plagin.version>3.9.0</compiler.plagin.version>
         <aspectj.version>1.9.7</aspectj.version>
-        <allure-junit5.version>2.13.6</allure-junit5.version>
-        <cucumber-java.version>6.10.4</cucumber-java.version>
-        <cucumber-junit.version>6.10.4</cucumber-junit.version>
+        <!--        <allure-junit5.version>2.13.6</allure-junit5.version>-->
+        <cucumber-java.version>5.7.0</cucumber-java.version>
+        <cucumber-junit.version>5.7.0</cucumber-junit.version>
         <allure-maven.version>2.10.0</allure-maven.version>
+        <allure-cucumber5.version>2.15.0</allure-cucumber5.version>
     </properties>
 
     <dependencies>
@@ -37,7 +38,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.8.2</version>
+            <version>${junit.jupiter.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.junit.platform/junit-platform-launcher -->
         <dependency>
@@ -51,21 +52,21 @@
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-java</artifactId>
-            <version>5.7.0</version>
+            <version>${cucumber-java.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-junit -->
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-junit</artifactId>
-            <version>5.7.0</version>
+            <version>${cucumber-junit.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/io.qameta.allure/allure-cucumber6-jvm -->
         <dependency>
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-cucumber5-jvm</artifactId>
-            <version>2.15.0</version>
+            <version>${allure-cucumber5.version}</version>
         </dependency>
     </dependencies>
     <build>
@@ -83,7 +84,8 @@
                         -Dcucumber.options="--plugin io.qameta.allure.cucumber5jvm.AllureCucumber5Jvm"
                     </argLine>
                     <systemPropertyVariables>
-                        <allure.results.directory>${project.build.directory}/reports/allure-results</allure.results.directory>
+                        <allure.results.directory>${project.build.directory}/reports/allure-results
+                        </allure.results.directory>
                     </systemPropertyVariables>
                 </configuration>
                 <dependencies>
@@ -98,7 +100,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>${compiler.plagin.version}</version>
                 <configuration>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
